@@ -13,12 +13,12 @@ export default class MainPageContainer extends Component {
            <MainStyles>
               <NavBarComponent/>
               <div className='grid-wrapper'>
-                  <Row className='dance-monitor-wrapper'>
+                  <div className='dance-monitor-wrapper'>
                   <DanceMonitorComponent/>
-                  </Row>
-                  <Row className='option-panel-wrapper'>
+                  </div>
+                  <div className='option-panel-wrapper'>
                   <OptionPanelComponent/>
-                  </Row>
+                  </div>
               </div>
               <div className='analytics-wrapper'>
                 <AccelerometerComponent></AccelerometerComponent>

@@ -5,11 +5,12 @@ const OptionPanelStyles = styled.div`
    .option-panel {
        padding:10px;
        height: 600px;
+       justify-content: center;
    }
    .option-button {
        padding: 4px;
        margin: 5px;
-       width: 100%;
+       width: 80%;
        background-color: ${BUTTON_COLOR};
    }
    .modal-header {
@@ -19,6 +20,9 @@ const OptionPanelStyles = styled.div`
        font-family: fantasy;
        font-size:26px;
        justify-content: center;
+   }
+   .row {
+        justify-content: center !important;
    }
 `;
 

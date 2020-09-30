@@ -1,63 +1,76 @@
 import React, {Component} from 'react';
 import createPlotlyComponent from 'react-plotlyjs';
+import socketIOClient from 'socket.io-client';
 import Plotly from 'plotly.js/dist/plotly-cartesian';
 
 import AnalyticsStyles from './style'
 
 export default class AccelerometerComponent extends Component {
+  constructor() {
+    super();
+    this.state = {
+      linex: {
+        x: [0],
+        y: [0],
+        name: 'x-coordinate'
+      },
+      liney: {
+        x: [0],
+        y: [0],
+        name: 'y-coordinate'
+      },
+      linez: {
+        x: [0],
+        y: [0],
+        name: 'z-coordinate'
+      },
+      layout: {
+        title: 'Accelerometer Readings',
+        xaxis: {
+          title: 'time'
+        },
+        yaxis: {
+          title: 'reading'
+        },
+        datarevision: 0,
+      },
+      revision: 0,
+      endpoint: 'http://localhost:5000'
+    }
+  }
+
   render() {
     const AccelerometerComponent = createPlotlyComponent(Plotly);
-    let accelerometerData = [
-      {
-        type: 'scatter',
-        name: 'x-coordinate',
-        x: [1, 2, 3],
-        y: [4, 8, 1],
-        marker: {
-          color: 'rgb(235, 52, 125)'
-        }
-      },
-      {
-        type: 'scatter',
-        name: 'y-coordinate',
-        x: [1, 2, 3],
-        y: [2, 3, 1],
-        marker: {
-          color: 'rgb(240, 136, 17)'
-        }
-      },
-      {
-        type: 'scatter',
-        name: 'z-coordinate',
-        x: [1, 2, 3],
-        y: [2, 4, 6],
-        marker: {
-          color: 'rgb(22, 152, 222)'
-        }
-      },
-    ];
     let layout = {
       title: 'Accelerometer Readings',
       xaxis: {
         title: 'time'
       },
-      // annotations: [
-      //   {
-      //     text: 'simple annotation',
-      //     x: 0,                         
-      //     xref: 'paper',                
-      //     y: 0,                         
-      //     yref: 'paper'      
-      //   }
-      // ]
+      yaxis: {
+        title: 'reading'
+      }
     };
-    let config = {
-      showLink: false,
-      displayModeBar: false
-    };
+
+    // const dataPoints = 15
+    const socket = socketIOClient(this.state.endpoint);
+
+    const {linex,liney,linez} = this.state;
+    socket.on('incoming data', (packet) => {
+      linex.x.push(packet[3])
+      linex.y.push(packet[0])
+      liney.x.push(packet[3])
+      liney.y.push(packet[1])
+      linez.x.push(packet[3])
+      linez.y.push(packet[2])
+      this.setState({revision: this.state.revision + 1 });
+      layout.datarevision = this.state.revision + 1;
+    })
+
     return (
       <AnalyticsStyles>
-          <AccelerometerComponent className="accelerometer-graph" data={accelerometerData} layout={layout} config={config}/>
+          <AccelerometerComponent className="accelerometer-graph" data={[
+              this.state.linex, this.state.liney, this.state.linez
+            ]} layout={this.state.layout} revision={this.state.revision}/>
      </AnalyticsStyles>
     );
   }

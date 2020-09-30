@@ -8,13 +8,13 @@ const MainStyles = styled.div`
        padding: 20px;
    }
    .dance-monitor-wrapper {
-       width: 70%;
+       width: 85%;
        border-radius: 10px;
-       margin-right: 20px;
        background-color: ${BUTTON_COLOR};
    }
    .option-panel-wrapper {
-       width: 250px;
+       width: 15%;
+       min-width: 150px;
        border: solid 2px ${BUTTON_COLOR};
        border-radius: 10px;
        justify-content: center;

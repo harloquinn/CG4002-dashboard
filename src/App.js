@@ -3,6 +3,7 @@ import MainPageContainer from'./containers/mainpagecontainer';
 import './App.css';
 
 class App extends Component {
+
   render() {
     return (
      <div>
