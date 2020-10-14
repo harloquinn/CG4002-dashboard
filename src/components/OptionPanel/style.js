@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { BUTTON_COLOR, BG_COLOR } from '../constants';
+import { BUTTON_COLOR, BG_COLOR,HEADER_COLOR } from '../constants';
 
 const OptionPanelStyles = styled.div`
    .option-panel {
@@ -16,7 +16,7 @@ const OptionPanelStyles = styled.div`
    .modal-header {
        border-bottom: 0px;
        padding: 5px;
-       color: ${BUTTON_COLOR};
+       color: ${HEADER_COLOR};
        font-family: fantasy;
        font-size:26px;
        justify-content: center;

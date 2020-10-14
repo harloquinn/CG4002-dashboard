@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { BUTTON_COLOR, BG_COLOR } from '../components/constants';
+import { BUTTON_COLOR, BG_COLOR,FONT_COLOR } from '../components/constants';
 
 const MainStyles = styled.div`
    .grid-wrapper {
@@ -8,9 +8,9 @@ const MainStyles = styled.div`
        padding: 20px;
    }
    .dance-monitor-wrapper {
-       width: 85%;
+       width: 100%;
        border-radius: 10px;
-       background-color: ${BUTTON_COLOR};
+       background-color: ${FONT_COLOR};
    }
    .option-panel-wrapper {
        width: 15%;
@@ -28,6 +28,7 @@ const MainStyles = styled.div`
    }
    .analytics-wrapper {
        display: flex;
+       justify-content: center;
    }
 `;
 

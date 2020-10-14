@@ -25,10 +25,10 @@ client.connect(err => {
   } else {
     console.log('Connected successfully to MongoDB')
   }
-  const db = client.db('CG4002')
-  const collection = db.collection('users')
-  const usercollection = db.collection('testdata')
-  const dancecollection = db.collection('dancemove')
+  const db = client.db('cg4002')
+  const datacollection = db.collection('users')
+  // const usercollection = db.collection('testdata')
+  const dancecollection = db.collection('dancemoves')
 
   const pipeline = {
     $match: {
@@ -48,14 +48,17 @@ client.connect(err => {
   (() => {
     //graph
     console.log(`startStream`)
-    const changeStream = collection.watch([pipeline], {
+    const changeStream = datacollection.watch([pipeline], {
       fullDocument: 'updateLookup' })
       changeStream.on('change', document => {
       const packet = []
       packet[0] = document.fullDocument.ax // could parse from object:_id
       packet[1] = document.fullDocument.ay
       packet[2] = document.fullDocument.az
-      packet[3] = document.fullDocument.TimeStamp
+      packet[3] = document.fullDocument.gx
+      packet[4] = document.fullDocument.gy
+      packet[5] = document.fullDocument.gz
+      packet[6] = document.fullDocument.TimeStamp
       io.emit('incoming data', packet)
       console.log(`packet emitted: ${packet}`)
     })
@@ -63,23 +66,21 @@ client.connect(err => {
     const dancechangeStream = dancecollection.watch([pipeline], {
       fullDocument: 'updateLookup' })
       dancechangeStream.on('change', document => {
-      const dancemove = []
-      dancemove[0] = document.fullDocument.Amove // could parse from object:_id
-      dancemove[1] = document.fullDocument.Bmove
-      dancemove[2] = document.fullDocument.Cmove
+      let dancemove = 'pending...'
+      dancemove = document.fullDocument.dance // could parse from object:_id
       io.emit('dance move', dancemove)
       console.log(`dancemove emitted: ${dancemove}`)
     })
-  // user
-    const userChangeStream = usercollection.watch()
-      userChangeStream.on('change', () => {
-        var count = 0;
-        count = usercollection.count().then((count) => { 
-          if (count < '4')
-            io.emit('active users', count)
-          console.log(`number of users: ${count}`)
-        });
-      })
+  // // user
+  //   const userChangeStream = usercollection.watch()
+  //     userChangeStream.on('change', () => {
+  //       var count = 0;
+  //       count = usercollection.count().then((count) => { 
+  //         if (count < '4')
+  //           io.emit('active users', count)
+  //         console.log(`number of users: ${count}`)
+  //       });
+  //     })
     }
 
   )()

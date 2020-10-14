@@ -56,11 +56,11 @@ export default class AccelerometerComponent extends Component {
 
     const {linex,liney,linez} = this.state;
     socket.on('incoming data', (packet) => {
-      linex.x.push(packet[3])
+      linex.x.push(packet[6])
       linex.y.push(packet[0])
-      liney.x.push(packet[3])
+      liney.x.push(packet[6])
       liney.y.push(packet[1])
-      linez.x.push(packet[3])
+      linez.x.push(packet[6])
       linez.y.push(packet[2])
       this.setState({revision: this.state.revision + 1 });
       layout.datarevision = this.state.revision + 1;

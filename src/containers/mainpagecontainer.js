@@ -16,9 +16,9 @@ export default class MainPageContainer extends Component {
                   <div className='dance-monitor-wrapper'>
                   <DanceMonitorComponent/>
                   </div>
-                  <div className='option-panel-wrapper'>
+                  {/* <div className='option-panel-wrapper'>
                   <OptionPanelComponent/>
-                  </div>
+                  </div> */}
               </div>
               <div className='analytics-wrapper'>
                 <AccelerometerComponent></AccelerometerComponent>

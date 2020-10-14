@@ -1,2 +1,5 @@
-export const BG_COLOR = "#6791B0"
-export const BUTTON_COLOR = "#9AB2B6"
+export const BG_COLOR = "#F76C6C"
+export const BUTTON_COLOR = "#F8E9A1"
+export const FONT_COLOR = "#A8D0E6"
+export const HEADER_COLOR = "#374785"
+
