@@ -10,7 +10,7 @@ const MainStyles = styled.div`
    .dance-monitor-wrapper {
        width: 100%;
        border-radius: 10px;
-       background-color: ${FONT_COLOR};
+       background-color: rgba(168,208,230,0.8);
    }
    .option-panel-wrapper {
        width: 15%;

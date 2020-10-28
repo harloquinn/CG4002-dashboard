@@ -30,7 +30,9 @@ const DanceMonitorStyles = styled.div`
       padding: 5px 8px 5px 8px;
       vertical-align: center;
       border: 0px;
-      background-color: ${BG_COLOR};
+      font-size: medium !important;
+      color: white !important;
+      background-color: ${BG_COLOR} !important;
    }
    .user-positions {
       display: flex;
@@ -49,6 +51,36 @@ const DanceMonitorStyles = styled.div`
       font-family: fantasy;
       color: white;
    }
+   .userAGraph {
+      display:flex;
+      justify-content: center;
+      background-color: rgba(252,192,28,0.7);
+   }
+   .userBGraph {
+      display:flex;
+      justify-content: center;
+      background-color: rgba(238,119,106,0.7);
+   }
+   .userCGraph {
+      display:flex;
+      justify-content: center;
+      background-color: rgba(124,115,29,0.7);
+   }
+   .graphPanel {
+      display:flex;
+      justify-content: center;
+   }
+   .btn-primary {
+      background-color: rgba(255,255,255, 0.3);
+      border: none;
+      color: ${HEADER_COLOR};
+      font-family: fantasy;
+      font-size: xx-large;
+   }
+   .btn-primary.focus, .btn-primary:focus {
+      outline: 0;
+      box-shadow: none!important;
+  }
 `;
 
 export default DanceMonitorStyles;

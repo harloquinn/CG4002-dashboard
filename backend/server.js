@@ -26,8 +26,10 @@ client.connect(err => {
     console.log('Connected successfully to MongoDB')
   }
   const db = client.db('cg4002')
-  const datacollection = db.collection('users')
-  // const usercollection = db.collection('testdata')
+  const datacollection1 = db.collection('dancer1')
+  const datacollection2 = db.collection('dancer2')
+  const datacollection3 = db.collection('dancer3')
+  const positioncollection = db.collection('danceposition')
   const dancecollection = db.collection('dancemoves')
 
   const pipeline = {
@@ -39,18 +41,18 @@ client.connect(err => {
   }
 
   io.on('connection', socket => {
-    console.log('connected')
+    // console.log('connected')
     socket.on('disconnect', () => {
-      console.log('socket client disconnected')
+      // console.log('socket client disconnected')
     })
   });
 
   (() => {
     //graph
     console.log(`startStream`)
-    const changeStream = datacollection.watch([pipeline], {
+    const changeStream1 = datacollection1.watch([pipeline], {
       fullDocument: 'updateLookup' })
-      changeStream.on('change', document => {
+      changeStream1.on('change', document => {
       const packet = []
       packet[0] = document.fullDocument.ax // could parse from object:_id
       packet[1] = document.fullDocument.ay
@@ -58,19 +60,56 @@ client.connect(err => {
       packet[3] = document.fullDocument.gx
       packet[4] = document.fullDocument.gy
       packet[5] = document.fullDocument.gz
-      packet[6] = document.fullDocument.TimeStamp
-      io.emit('incoming data', packet)
-      console.log(`packet emitted: ${packet}`)
+      packet[6] = document.fullDocument.time
+      io.emit('incoming data1', packet)
+    })
+
+    const changeStream2 = datacollection2.watch([pipeline], {
+      fullDocument: 'updateLookup' })
+      changeStream2.on('change', document => {
+      const packet = []
+      packet[0] = document.fullDocument.ax // could parse from object:_id
+      packet[1] = document.fullDocument.ay
+      packet[2] = document.fullDocument.az
+      packet[3] = document.fullDocument.gx
+      packet[4] = document.fullDocument.gy
+      packet[5] = document.fullDocument.gz
+      packet[6] = document.fullDocument.time
+      io.emit('incoming data2', packet)
+    })
+
+    const changeStream3 = datacollection3.watch([pipeline], {
+      fullDocument: 'updateLookup' })
+      changeStream3.on('change', document => {
+      const packet = []
+      packet[0] = document.fullDocument.ax // could parse from object:_id
+      packet[1] = document.fullDocument.ay
+      packet[2] = document.fullDocument.az
+      packet[3] = document.fullDocument.gx
+      packet[4] = document.fullDocument.gy
+      packet[5] = document.fullDocument.gz
+      packet[6] = document.fullDocument.time
+      io.emit('incoming data3', packet)
     })
     //predicted dancemove
     const dancechangeStream = dancecollection.watch([pipeline], {
       fullDocument: 'updateLookup' })
       dancechangeStream.on('change', document => {
-      let dancemove = 'pending...'
-      dancemove = document.fullDocument.dance // could parse from object:_id
-      io.emit('dance move', dancemove)
-      console.log(`dancemove emitted: ${dancemove}`)
+      let dancemoves = ''
+      dancemoves = document.fullDocument.dancemoves // could parse from object:_id
+      io.emit('dance move', dancemoves)
+      console.log(`dancemove emitted: ${dancemoves}`)
     })
+
+    const positionchangeStream = positioncollection.watch([pipeline], {
+      fullDocument: 'updateLookup' })
+      positionchangeStream.on('change', document => {
+      let positionData = []
+      positionData = document.fullDocument.dance_position // could parse from object:_id
+      io.emit('change position', positionData)
+      console.log(`position emitted: ${positionData}`)
+    })
+
   // // user
   //   const userChangeStream = usercollection.watch()
   //     userChangeStream.on('change', () => {
