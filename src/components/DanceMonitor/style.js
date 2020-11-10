@@ -16,7 +16,7 @@ const DanceMonitorStyles = styled.div`
        border-bottom: 0px;
        display: flex;
        font-family: fantasy;
-       font-size:32px;
+       font-size: 32px;
        color: ${HEADER_COLOR} !important;
        justify-content: center;
    }
@@ -25,14 +25,24 @@ const DanceMonitorStyles = styled.div`
       justify-content: center;
       vertical-align: center;
       height: 50px;
+      font-size: 18px;
    }
    .ready-button {
-      padding: 5px 8px 5px 8px;
+      padding: 8px 10px 8px 10px;
       vertical-align: center;
       border: 0px;
-      font-size: medium !important;
+      margin-right: 20px;
+      font-size: 18px !important;
       color: white !important;
       background-color: ${BG_COLOR} !important;
+   }
+   .reset-button {
+      padding: 8px 10px 8px 10px;
+      vertical-align: center;
+      border: 0px;
+      font-size: 18px !important;
+      color: white !important;
+      background-color: ${HEADER_COLOR} !important;
    }
    .user-positions {
       display: flex;
@@ -47,9 +57,9 @@ const DanceMonitorStyles = styled.div`
    }
    .danceStatus {
       justify-content: center;
-      font-size: 30px;
       font-family: fantasy;
-      color: white;
+      font-size: 32px;
+      color: black;
    }
    .userAGraph {
       display:flex;

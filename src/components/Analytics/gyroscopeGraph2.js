@@ -31,7 +31,7 @@ export default class GyroscopeComponent2 extends Component {
       layout: {
         plot_bgcolor:'rgba(0,0,0,0)',
         paper_bgcolor:'rgba(0,0,0,0)',
-        title: 'Gyroscope Readings',
+        title: 'Orientation',
         xaxis: {
           title: 'time (ms)'
         },
@@ -46,28 +46,28 @@ export default class GyroscopeComponent2 extends Component {
   }
 
   componentDidMount() {
-    setInterval(this.updateGraph, 1500);
+    setInterval(this.updateGraph, 2000);
   } 
 
   updateGraph = () => {
     const {linex,liney,linez,layout,arrayx, arrayy,arrayz,timeArray} = this.state;
-    linex.y.push(timeArray[timeArray.length-1]);
-    linex.x.push(arrayx[arrayx.length-1]);
-    liney.y.push(timeArray[timeArray.length-1]);
-    liney.x.push(arrayy[arrayy.length-1]);
-    linez.y.push(timeArray[timeArray.length-1]);
-    linez.x.push(arrayz[arrayz.length-1]);
+    linex.x.push(timeArray[timeArray.length-1]);
+    linex.y.push(arrayx[arrayx.length-1]);
+    liney.x.push(timeArray[timeArray.length-1]);
+    liney.y.push(arrayy[arrayy.length-1]);
+    linez.x.push(timeArray[timeArray.length-1]);
+    linez.y.push(arrayz[arrayz.length-1]);
     if (linex.x.length >= 20) {
       linex.x.shift();
       linex.y.shift();
     }
     if (liney.x.length >= 20) {
-      linex.x.shift();
-      linex.y.shift();
+      liney.x.shift();
+      liney.y.shift();
     }
     if (linez.x.length >= 20) {
-      linex.x.shift();
-      linex.y.shift();
+      linez.x.shift();
+      linez.y.shift();
     }
     this.setState({revision: this.state.revision + 1});
     layout.datarevision = this.state.revision + 1;
@@ -89,7 +89,7 @@ export default class GyroscopeComponent2 extends Component {
     return (
       <AnalyticsStyles>
           <GyroscopeComponent2 className="accelerometer-graph" data={[
-              this.state.linex]} layout={this.state.layout} revision={this.state.revision}/>
+              this.state.linex, this.state.liney,this.state.linez]} layout={this.state.layout} revision={this.state.revision}/>
      </AnalyticsStyles>
     );
   }

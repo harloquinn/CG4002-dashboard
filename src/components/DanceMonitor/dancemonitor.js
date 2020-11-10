@@ -18,7 +18,6 @@ export default class DanceMonitorComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
       start: false,
       status: '',
       userCount: 3,
@@ -37,7 +36,7 @@ export default class DanceMonitorComponent extends Component {
   componentDidMount() {
     const socket = socketIOClient(this.state.endpoint);
     socket.on('dance move', (dancemoves) => {
-      this.setState({start: true, predictedDance:dancemoves });
+      this.setState({predictedDance:dancemoves});
     })
     socket.on('active users', (data) => {
       this.setState({userCount: data });
@@ -58,7 +57,7 @@ export default class DanceMonitorComponent extends Component {
     this.setState({
       userA: positionDict[positionData[0]],
       userB: positionDict[positionData[1]],
-      userC:positionDict[positionData[2]]
+      userC:positionDict[positionData[2]],
     })
   }
 
@@ -82,10 +81,9 @@ export default class DanceMonitorComponent extends Component {
       this.setState({showC: !this.state.showC});
   }
 
-  test = () => {
-    this.changePosition([2,1,3]);
+  refreshPage = () => {
+    window.location.reload();
   }
-
 
   render() {
     console.log(this.state.position[0]);
@@ -99,35 +97,35 @@ export default class DanceMonitorComponent extends Component {
                         Current Active Users: {this.state.userCount}
                       </Row>
                       <Row>
-                      {this.state.userCount === 3 ? 
-                        <Button className='ready-button'>
-                          Let' Begin!
-                        </Button> : null}
-                        <Button onClick={this.test}></Button>
+                        <Button className='reset-button' 
+                        onClick={this.refreshPage}> Restart Routine </Button>
                       </Row>
                       <Row>
                       <div className='user-positions'>
                         <div className='individual-state'>
                         {this.state.userCount >= 1 ? 
                         <div>
-                          <img src={this.state.userA} alt={'userA'} width='200px' height='350'px/>
+                          <img src={this.state.userA} alt={'userA'} width='250px' height='380'px/>
                         <br></br>
                         </div>
                             : null}
+                        <span className='danceStatus'>{this.state.position[0]}</span>
                         </div>
                         <div className='individual-state'>
                         {this.state.userCount >= 2 ? 
                         <div>
-                          <img src={this.state.userB} alt={'userB'} width='200px' height='350'px/>
+                          <img src={this.state.userB} alt={'userB'} width='250px' height='380'px/>
                           <br></br>
                         </div> : null}
+                        <span className='danceStatus'>{this.state.position[1]}</span>
                         </div>
                         <div className='individual-state'>
                         {this.state.userCount >= 3 ?
                         <div>
-                          <img src={this.state.userC} alt={'userC'} width='200px' height='350'px/>
+                          <img src={this.state.userC} alt={'userC'} width='250px' height='380'px/>
                           <br></br>
                         </div> : null}
+                        <span className='danceStatus'>{this.state.position[2]}</span>
                         </div>                        
                       </div>
                       </Row> 
@@ -136,29 +134,27 @@ export default class DanceMonitorComponent extends Component {
                             {this.state.predictedDance}
                           </span>
                       </Row>
-                      <Row className='danceStatus'>
-                        {this.state.position}
-                      </Row>
                       <br></br>
                       <br></br>
                   </div>
                   <div className='userAGraph'>
                     {this.state.showA ? <Button onClick={() => this.hideGraph('userA')}>Hide User A data</Button> :
                     <Button onClick={() => this.hideGraph('userA')}> Show User A data </Button>}
-                    {this.state.showA ? <div className='graphPanel'><AccelerometerComponent1/>
-                    <GyroscopeComponent1/></div> : null}
+                    {this.state.showA ? <div className='graphPanel'>
+                    <AccelerometerComponent1 />
+                    <GyroscopeComponent1 reset={this.state.reset}/></div> : null}
                   </div>
                   <div className='userBGraph'>
                     {this.state.showB ? <Button onClick={ () => this.hideGraph('userB')}>Hide User B data</Button> :
                     <Button onClick={() => this.hideGraph('userB')}> Show User B data </Button>}
                     {this.state.showB ? <div className='graphPanel'><AccelerometerComponent2/>
-                    <GyroscopeComponent2/></div> : null}
+                    <GyroscopeComponent2 reset={this.state.reset}/></div> : null}
                   </div>
                   <div className='userCGraph'>
                     {this.state.showC ? <Button onClick={() => this.hideGraph('userC')}>Hide User C data</Button> :
                     <Button onClick={() => this.hideGraph('userC')}> Show User C data </Button>}
                     {this.state.showC ? <div className='graphPanel'><AccelerometerComponent3/>
-                    <GyroscopeComponent3/></div> : null}
+                    <GyroscopeComponent3 reset={this.state.reset}/></div> : null}
                   </div>
           </DanceMonitorStyles>
       )
