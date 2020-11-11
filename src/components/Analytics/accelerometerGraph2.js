@@ -31,7 +31,7 @@ export default class AccelerometerComponent2 extends Component {
       layout: {
         plot_bgcolor:'rgba(0,0,0,0)',
         paper_bgcolor:'rgba(0,0,0,0)',
-        title: 'Acceleration',
+        title: 'Speed of movement',
         xaxis: {
           title: 'time (ms)'
         },
@@ -79,7 +79,7 @@ export default class AccelerometerComponent2 extends Component {
     const socket = socketIOClient(this.state.endpoint);
 
     const {timeArray,arrayx,arrayy,arrayz} = this.state;
-    socket.on('incoming data1', (packet) => {
+    socket.on('incoming data2', (packet) => {
       timeArray.push(packet[6]);
       arrayx.push(packet[0])
       arrayy.push(packet[1]);

@@ -31,6 +31,7 @@ client.connect(err => {
   const datacollection3 = db.collection('dancer3')
   const positioncollection = db.collection('danceposition')
   const dancecollection = db.collection('dancemoves')
+  const logincollection = db.collection('connections')
 
   const pipeline = {
     $match: {
@@ -96,9 +97,18 @@ client.connect(err => {
       fullDocument: 'updateLookup' })
       dancechangeStream.on('change', document => {
       let dancemoves = ''
-      dancemoves = document.fullDocument.dancemoves // could parse from object:_id
+      dancemoves = document.fullDocument.predicted_dance // could parse from object:_id
       io.emit('dance move', dancemoves)
       console.log(`dancemove emitted: ${dancemoves}`)
+    })
+    //predicted dancemove
+    const scorechangeStream = dancecollection.watch([pipeline], {
+      fullDocument: 'updateLookup' })
+      dancechangeStream.on('change', document => {
+      let score = 100
+      score = document.fullDocument.confidence_score // could parse from object:_id
+      io.emit('confidence', score)
+      console.log(`confidence score emitted: ${score}`)
     })
 
     const positionchangeStream = positioncollection.watch([pipeline], {
@@ -110,16 +120,15 @@ client.connect(err => {
       console.log(`position emitted: ${positionData}`)
     })
 
-  // // user
-  //   const userChangeStream = usercollection.watch()
-  //     userChangeStream.on('change', () => {
-  //       var count = 0;
-  //       count = usercollection.count().then((count) => { 
-  //         if (count < '4')
-  //           io.emit('active users', count)
-  //         console.log(`number of users: ${count}`)
-  //       });
-  //     })
+  // user
+    const userChangeStream = logincollection.watch([pipeline], {
+      fullDocument: 'updateLookup' })
+      userChangeStream.on('change', document => {
+      var count = 0;
+      count = document.fullDocument.count
+      io.emit('active users', count)
+      console.log(`number of users: ${count}`)
+      })
     }
 
   )()

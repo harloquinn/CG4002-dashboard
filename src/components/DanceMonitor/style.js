@@ -37,8 +37,8 @@ const DanceMonitorStyles = styled.div`
       background-color: ${BG_COLOR} !important;
    }
    .reset-button {
+      justify-content: center;
       padding: 8px 10px 8px 10px;
-      vertical-align: center;
       border: 0px;
       font-size: 18px !important;
       color: white !important;

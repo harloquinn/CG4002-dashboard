@@ -3,7 +3,11 @@ import {Button, Row, Col} from 'react-bootstrap';
 import imgA from './userA.png'
 import imgB from './userB.png'
 import imgC from './userC.png'
+import perfect from './perfect.png'
+import excellent from './excellent.png'
+import good from './good.png'
 import socketIOClient from 'socket.io-client';
+import Alert from 'react-bootstrap/Alert'
 import AccelerometerComponent1 from '../Analytics/accelerometerGraph1';
 import AccelerometerComponent2 from '../Analytics/accelerometerGraph2';
 import AccelerometerComponent3 from '../Analytics/accelerometerGraph3';
@@ -20,7 +24,7 @@ export default class DanceMonitorComponent extends Component {
     this.state = {
       start: false,
       status: '',
-      userCount: 3,
+      userCount: 0,
       predictedDance: '',
       userA: imgA,
       userB: imgB,
@@ -29,7 +33,9 @@ export default class DanceMonitorComponent extends Component {
       showB:true,
       showC:true,
       endpoint: 'http://localhost:5000',
-      position: [1,2,3]
+      position: [1,2,3],
+      score: null,
+      logout: false
     }
   }
 
@@ -42,10 +48,29 @@ export default class DanceMonitorComponent extends Component {
       this.setState({userCount: data });
     })
     socket.on('change position', (positionData) => {
-      this.setState({position: positionData});
-      this.changePosition(positionData);
+      this.setState({position: positionData}, this.changePosition(positionData));
+    })
+    socket.on('confidence', (score) => {
+      this.setScore(score);
     })
     
+  }
+
+  // setDanceMove = (dancemoves) => {
+  //   if (dancemoves === "logout") {
+  //     this.setState({logout: true})
+  //   }
+  //   else
+  //     this.setState({predictedDance:dancemoves})
+  // }
+
+  setScore = (score) => {
+    if (score >= '40')
+      this.setState({score: perfect})
+    else if (score <= '20')
+      this.setState({score: good})
+    else
+      this.setState({score: excellent})
   }
 
   changePosition = (positionData) => {
@@ -53,11 +78,10 @@ export default class DanceMonitorComponent extends Component {
     positionDict[1] = imgA;
     positionDict[2] = imgB;
     positionDict[3] = imgC;
-    console.log('test',positionDict[2]);
     this.setState({
-      userA: positionDict[positionData[0]],
-      userB: positionDict[positionData[1]],
-      userC:positionDict[positionData[2]],
+      userA: positionDict[parseInt(positionData[0])],
+      userB: positionDict[parseInt(positionData[1])],
+      userC: positionDict[parseInt(positionData[2])],
     })
   }
 
@@ -72,6 +96,7 @@ export default class DanceMonitorComponent extends Component {
   //   else
   //     this.setState({status: 'Lets try again!'})
   // }
+
   hideGraph = (user) => {
     if (user === 'userA')
       this.setState({showA: !this.state.showA});
@@ -88,7 +113,7 @@ export default class DanceMonitorComponent extends Component {
   render() {
     console.log(this.state.position[0]);
       return (
-          <DanceMonitorStyles>
+          <DanceMonitorStyles>                 
                   <div className='page-wrapper'>
                       <span className = 'monitor-header'>
                         Dance Monitor
@@ -96,43 +121,56 @@ export default class DanceMonitorComponent extends Component {
                       <Row className='active-user-panel'>
                         Current Active Users: {this.state.userCount}
                       </Row>
+                      <br></br>
                       <Row>
-                        <Button className='reset-button' 
-                        onClick={this.refreshPage}> Restart Routine </Button>
+                        {this.state.score ? <img src={this.state.score} alt={'score'} width='180px' height='60'px/> : null}
                       </Row>
                       <Row>
                       <div className='user-positions'>
                         <div className='individual-state'>
-                        {this.state.userCount >= 1 ? 
-                        <div>
-                          <img src={this.state.userA} alt={'userA'} width='250px' height='380'px/>
-                        <br></br>
-                        </div>
-                            : null}
-                        <span className='danceStatus'>{this.state.position[0]}</span>
+                        {this.state.userCount >= 1 ?
+                          <div>
+                            <div>
+                              <img src={this.state.userA} alt={'userA'} width='250px' height='380'px/>
+                            <br></br>
+                            </div> 
+                            <span className='danceStatus'>{this.state.position[0]}</span>
+                          </div> : null}
                         </div>
                         <div className='individual-state'>
-                        {this.state.userCount >= 2 ? 
-                        <div>
-                          <img src={this.state.userB} alt={'userB'} width='250px' height='380'px/>
-                          <br></br>
-                        </div> : null}
-                        <span className='danceStatus'>{this.state.position[1]}</span>
+                        {this.state.userCount >= 2 ?
+                        <div> 
+                          <div>
+                            <img src={this.state.userB} alt={'userB'} width='250px' height='380'px/>
+                            <br></br>
+                          </div>
+                          <span className='danceStatus'>{this.state.position[1]}</span>
+                          </div> : null}
                         </div>
                         <div className='individual-state'>
                         {this.state.userCount >= 3 ?
                         <div>
+                        <div>
                           <img src={this.state.userC} alt={'userC'} width='250px' height='380'px/>
                           <br></br>
-                        </div> : null}
+                        </div>
                         <span className='danceStatus'>{this.state.position[2]}</span>
-                        </div>                        
+                        </div> : null} 
+                        </div>                       
                       </div>
                       </Row> 
                       <Row className='danceStatus'>
                           <span>
-                            {this.state.predictedDance}
+                            {this.state.predictedDance === 'logout' ?
+                             <Alert variant="warning">
+                             <Alert.Heading> Are you ready to log out ?</Alert.Heading>
+                           </Alert>: this.state.predictedDance}
                           </span>
+                      </Row>
+                      <Row>
+                      <Button className='reset-button' 
+                        onClick={this.refreshPage}> Restart Routine
+                      </Button>
                       </Row>
                       <br></br>
                       <br></br>

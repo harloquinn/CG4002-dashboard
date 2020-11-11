@@ -31,7 +31,7 @@ export default class AccelerometerComponent1 extends Component {
       layout: {
         plot_bgcolor:'rgba(0,0,0,0)',
         paper_bgcolor:'rgba(0,0,0,0)',
-        title: 'Acceleration',
+        title: 'Speed of movement',
         xaxis: {
           title: 'time (ms)'
         },
