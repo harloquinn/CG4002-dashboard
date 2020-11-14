@@ -35,14 +35,14 @@ export default class DanceMonitorComponent extends Component {
       endpoint: 'http://localhost:5000',
       position: [1,2,3],
       score: null,
-      logout: false
+      logout: false,
     }
   }
 
   componentDidMount() {
     const socket = socketIOClient(this.state.endpoint);
     socket.on('dance move', (dancemoves) => {
-      this.setState({predictedDance:dancemoves});
+      this.setState({predictedDance: dancemoves});
     })
     socket.on('active users', (data) => {
       this.setState({userCount: data });
@@ -96,6 +96,10 @@ export default class DanceMonitorComponent extends Component {
   //   else
   //     this.setState({status: 'Lets try again!'})
   // }
+
+  closeTab = () => {
+    window.close();
+  }
 
   hideGraph = (user) => {
     if (user === 'userA')
@@ -162,9 +166,11 @@ export default class DanceMonitorComponent extends Component {
                       <Row className='danceStatus'>
                           <span>
                             {this.state.predictedDance === 'logout' ?
-                             <Alert variant="warning">
-                             <Alert.Heading> Are you ready to log out ?</Alert.Heading>
-                           </Alert>: this.state.predictedDance}
+                             <Alert className='alert-box' variant="warning">
+                             <Alert.Heading> Confirm log out ?</Alert.Heading>
+                             <span className='buttons'><Button className='ready-button2' onClick={this.closeTab}>Yes</Button></span>
+                           </Alert>
+                           : this.state.predictedDance}
                           </span>
                       </Row>
                       <Row>
